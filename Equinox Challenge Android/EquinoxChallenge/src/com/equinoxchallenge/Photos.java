@@ -80,12 +80,12 @@ public class Photos extends Activity {
 	  }
 	
 	public void onClick(View view) {
-	    camera.takePicture(null, null, new PhotoHandler(getApplicationContext()));
+		PhotoHandler pH = new PhotoHandler(getApplicationContext(), this);
+	    camera.takePicture(null, null, pH);
 	}
 	
-	public void galleryStart(String file) {
+	public void galleryStart() {
 		Intent intent = new Intent(this, PhotoGallery.class);
-	    releaseCameraAndPreview();
 	    startActivity(intent);
 	}
 	
@@ -109,6 +109,7 @@ public class Photos extends Activity {
 	
 	private void releaseCameraAndPreview() {
 	    if (camera != null) {
+	    	camera.stopPreview();
 	    	camera.release();
 	    	camera = null;
 	    }
@@ -130,18 +131,19 @@ public class Photos extends Activity {
 		getMenuInflater().inflate(R.menu.photos, menu);
 		return true;
 	}
+	
+	private void openSettings() {
+    	Intent intent = new Intent(this, Settings.class);
+    	startActivity(intent);
+    }
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+		case R.id.action_settings:
+            openSettings();
+            return true;
 		case android.R.id.home:
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown. Use NavUtils to allow users
-			// to navigate up one level in the application structure. For
-			// more details, see the Navigation pattern on Android Design:
-			//
-			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-			//
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
 		}

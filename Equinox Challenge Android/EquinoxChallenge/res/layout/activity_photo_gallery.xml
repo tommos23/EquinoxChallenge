@@ -8,9 +8,49 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".PhotoGallery" >
 
-    <TextView
+    <Button
+        android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:layout_alignBottom="@+id/photoComment"
+        android:layout_alignTop="@+id/photoComment"
+        android:layout_toRightOf="@+id/photoComment"
+        android:onClick="saveComment"
+        android:text="@string/save" />
+
+    <EditText
+        android:id="@+id/photoComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="22dp"
+        android:ems="10"
+        android:hint="@string/comments" />
+
+    <FrameLayout
+        android:id="@+id/frameLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" >
+
+        <ImageView
+            android:id="@+id/takenPhoto"
+            android:layout_width="fill_parent"
+            android:layout_height="362dp"
+            android:contentDescription="@string/userPhoto"
+            android:src="@drawable/common_signin_btn_icon_dark" />
+
+    </FrameLayout>
+
+    <ImageButton
+        android:id="@+id/imageButton1"
+        android:layout_width="36dp"
+        android:layout_height="31dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@null"
+        android:onClick="deletePhoto"
+        android:src="@android:drawable/ic_delete" android:contentDescription="@string/deleteImage"/>
 
 </RelativeLayout>

@@ -73,5 +73,9 @@
     <string name="photo_button">Photo Button</string>
     <string name="title_activity_photo_gallery">Photo Gallery</string>
     <string name="hello_world">Hello world!</string>
+    <string name="comments">Comments</string>
+    <string name="userPhoto">User Taken Photo</string>
+    <string name="deleteImage">Delete Image</string>
+    <string name="sync_photos">Sync Photos</string>
 
 </resources>
