@@ -1,5 +1,18 @@
 package com.equinoxchallenge;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.NetworkInfo.State;
 import android.os.Bundle;
 import android.os.Environment;
 import android.app.Activity;
@@ -12,6 +25,7 @@ import android.widget.Toast;
 import android.support.v4.app.NavUtils;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
@@ -28,6 +42,11 @@ public class Photos extends Activity {
 	private Camera camera;
 	private int cameraId = 0;
 	private Preview mPreview;
+	
+	// Variables for network detection
+	ConnectivityManager conMan = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+	State mobile = conMan.getNetworkInfo(0).getState();
+	State wifi = conMan.getNetworkInfo(1).getState();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -210,5 +229,53 @@ public class Photos extends Activity {
 			Log.e("photo", "Data empty");
 		}
 	}*/
-
+	
+	public void uploadPhotos() {
+		// Check WiFi availability
+		// If WiFi upload remaining locations, then photos
+		if (wifi == NetworkInfo.State.CONNECTED || wifi == NetworkInfo.State.CONNECTING) {
+			// For each photo with caption
+			File myFile = new File("/path/to/file.png");
+			RequestParams params = new RequestParams();
+			try {
+			    params.put("image", myFile);
+			} catch(FileNotFoundException e) {
+				// Ignore missing file
+			}
+			// add parameter caption
+			// add parameter mobileNumber
+			AsyncHttpClient client = new AsyncHttpClient();
+	    	client.setBasicAuth("mobileApplication","hupad8uC");
+	    	client.post("game/status", params, new JsonHttpResponseHandler() {
+	            @Override
+	            public void onSuccess(JSONObject data) {
+	            	try {
+		                boolean ok = data.getBoolean("ok");
+		                if (ok) {
+		                	boolean evacuate = data.getBoolean("data");
+		                	if (evacuate) {
+		                		// Switch to the evacuate view
+		                		Intent evacuateIntent = new Intent(getApplicationContext(), Evacuate.class);
+		                    	startActivity(evacuateIntent);
+		                	}
+		                }
+	            	}
+	            	catch (JSONException e) {
+	            		e.printStackTrace();
+	            	}
+	            }
+	            @Override
+	            public void onFailure(int statusCode, java.lang.Throwable e, org.json.JSONObject errorResponse) {
+	            	Toast toast = Toast.makeText(getApplicationContext(), "Photo upload failed.", Toast.LENGTH_SHORT);
+            		toast.show();
+	            }
+	        });
+		}
+		// If 3G just upload remaining locations
+		else if (mobile == NetworkInfo.State.CONNECTED || mobile == NetworkInfo.State.CONNECTING) {
+		    //mobile
+			Toast toast = Toast.makeText(getApplicationContext(), "WiFi must be available for photo uploads.", Toast.LENGTH_SHORT);
+    		toast.show();
+		}
+	}
 }

@@ -1,5 +1,11 @@
 package com.equinoxchallenge;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -12,11 +18,35 @@ public class MainActivity extends Activity {
 	
 	public static final String FILENAME = "equinoxChallengeData";
 	
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);        
+        setContentView(R.layout.activity_main);    
+        AsyncHttpClient client = new AsyncHttpClient();
+    	client.setBasicAuth("mobileApplication","hupad8uC");
+    	client.get("game/evacuation", null, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(JSONObject data) {
+            	try {
+	                boolean ok = data.getBoolean("ok");
+	                if (ok) {
+	                	boolean evacuate = data.getBoolean("data");
+	                	if (evacuate) {
+	                		// Switch to the evacuate view
+	                		Intent evacuateIntent = new Intent(getApplicationContext(), Evacuate.class);
+	                    	startActivity(evacuateIntent);
+	                	}
+	                }
+            	}
+            	catch (JSONException e) {
+            		e.printStackTrace();
+            	}
+            }
+            @Override
+            public void onFailure(int statusCode, java.lang.Throwable e, org.json.JSONObject errorResponse) {
+            	// Do nothing
+            }
+        });
     }
 
 
