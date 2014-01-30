@@ -6,13 +6,17 @@ import org.json.JSONObject;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	
@@ -65,7 +69,7 @@ public class MainActivity extends Activity {
     
     //Click photos button
     public void photos(View view) {
-    	Intent intent = new Intent(this, Photos.class);
+    	Intent intent = new Intent(this, PhotoGallery.class);
     	startActivity(intent);
     }
     
@@ -74,7 +78,7 @@ public class MainActivity extends Activity {
     	startActivity(intent);
     }
     
-    public void openSettings() {
+    private void openSettings() {
     	Intent intent = new Intent(this, Settings.class);
     	startActivity(intent);
     }
@@ -83,6 +87,16 @@ public class MainActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
+        	case R.id.photo_sync:
+        		ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        		NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        		if (mWifi.isConnected()) {
+        			Toast.makeText(getBaseContext(), "Photos Synced", Toast.LENGTH_LONG).show();
+        		    return true;
+        		} else {
+        			Toast.makeText(getBaseContext(), "Not Connected to WI-FI", Toast.LENGTH_LONG).show();
+        			return true;
+        		}
             case R.id.action_settings:
                 openSettings();
                 return true;
