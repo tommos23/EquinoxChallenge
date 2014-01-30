@@ -8,6 +8,8 @@ import java.util.Date;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+
+import android.graphics.Interpolator.Result;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.os.AsyncTask;
@@ -55,6 +57,7 @@ class savePhoto extends AsyncTask<String, Void, String> {
 	    if (!pictureFileDir.exists() && !pictureFileDir.mkdirs()) {
 	      Log.d(Photos.DEBUG_TAG, "Can't create directory to save image.");
 	      Toast.makeText(context, "Can't create directory to save image.", Toast.LENGTH_LONG).show();
+	      cancel(true);
 	      return "failed to save";
 	    }
 	    
@@ -70,7 +73,8 @@ class savePhoto extends AsyncTask<String, Void, String> {
 	        fos.write(data);
 	        fos.close(); 
 	      } catch (Exception error) {
-	        Log.d(Photos.DEBUG_TAG, "File" + filename + " not saved: " + error.getMessage());      
+	        Log.d(Photos.DEBUG_TAG, "File" + filename + " not saved: " + error.getMessage()); 
+	        cancel(true);     
 	      } 
 		return null;
 	}
@@ -82,6 +86,10 @@ class savePhoto extends AsyncTask<String, Void, String> {
 		Toast.makeText(context, "New Image saved", Toast.LENGTH_LONG).show();
 		Intent intent = new Intent(context.getApplicationContext(), PhotoGallery.class);
 		context.getApplicationContext().startActivity(intent);  	
+	}
+	
+	protected void onCancelled(Result r) {
+		Toast.makeText(context, "Image not saved", Toast.LENGTH_LONG).show();
 	}
 	
 	private File getDir() {
