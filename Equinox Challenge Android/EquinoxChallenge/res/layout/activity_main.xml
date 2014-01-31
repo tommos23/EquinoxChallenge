@@ -30,7 +30,8 @@
         android:layout_below="@+id/postButt"
         android:layout_marginTop="18dp"
         android:onClick="photos"
-        android:text="@string/photo" />
+        android:text="@string/photo"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/panicButt"

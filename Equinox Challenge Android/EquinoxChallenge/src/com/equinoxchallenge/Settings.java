@@ -30,7 +30,6 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -213,7 +212,6 @@ public class Settings extends Activity {
 				fos.close();
 			} catch (IOException e) {
 				e.printStackTrace();
-				Log.d("EquinoxChallenge", "write problem");
 			}
 		 }
 				 
@@ -226,8 +224,11 @@ public class Settings extends Activity {
         	locationInfo = new LocationInfo(getBaseContext());
         	updateLocation();
         } catch (UnsupportedOperationException ex) {
-            Log.d("EquinoxChallenge", "UnsupportedOperationException thrown - the device doesn't have any location providers");
         }    	
+    }
+    
+    public void stopUpdates() {
+    	locationInfo = null;
     }
     
     public void checkGameStart(View view) throws JSONException {
@@ -245,7 +246,7 @@ public class Settings extends Activity {
 	                		toast.show();
 	                	}
 	                	else {
-	                		// stopUpdates();
+	                		stopUpdates();
 	                		Toast toast = Toast.makeText(getApplicationContext(), "The game isn't running, tracking disabled.", Toast.LENGTH_SHORT);
 	                		toast.show();
 	                	}

@@ -16,7 +16,6 @@ import android.net.NetworkInfo.State;
 import android.os.Bundle;
 import android.os.Environment;
 import android.app.Activity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -97,7 +96,6 @@ public class Photos extends Activity {
 	      CameraInfo info = new CameraInfo();
 	      Camera.getCameraInfo(i, info);
 	      if (info.facing == CameraInfo.CAMERA_FACING_BACK) {
-	        Log.d(DEBUG_TAG, "Camera found");
 	        cameraId = i;
 	        break;
 	      }
@@ -235,7 +233,6 @@ public class Photos extends Activity {
 		        photoIcon.setImageBitmap(imageBitmap);
 			}
 		}else{
-			Log.e("photo", "Data empty");
 		}
 	}*/
 	

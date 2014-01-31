@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import android.content.Context;
 import android.hardware.Camera;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -46,7 +45,6 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 	            mCamera.startPreview();
 
 	        } catch (Exception e){
-	            Log.d(TAG, "Error starting camera preview: " + e.getMessage());
 	        }
 	}
 
@@ -57,7 +55,6 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
         	mCamera.setPreviewDisplay(holder);
         	mCamera.startPreview();
         } catch (IOException e) {
-            Log.d(TAG, "Error setting camera preview: " + e.getMessage());
         }
 		
 	}
