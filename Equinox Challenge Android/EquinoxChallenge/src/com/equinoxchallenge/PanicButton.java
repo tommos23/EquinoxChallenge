@@ -13,6 +13,7 @@ import android.widget.Toast;
 import android.support.v4.app.NavUtils;
 import android.telephony.SmsManager;
 import android.annotation.TargetApi;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 
 public class PanicButton extends Activity {
@@ -35,6 +36,10 @@ public class PanicButton extends Activity {
 			locationInfo = new LocationInfo(this);
 			LocationLibrary.forceLocationUpdate(PanicButton.this);	
 		}
+    	View backgroundimage = findViewById(R.id.panic_view);
+    	Drawable background = backgroundimage.getBackground();
+    	background.setAlpha(30);
+
 	}
 
 	/**

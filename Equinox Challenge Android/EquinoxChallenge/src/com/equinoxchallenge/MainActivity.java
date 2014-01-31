@@ -1,5 +1,11 @@
 package com.equinoxchallenge;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -7,6 +13,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,11 +24,37 @@ public class MainActivity extends Activity {
 	
 	public static final String FILENAME = "equinoxChallengeData";
 	
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);        
+        setContentView(R.layout.activity_main);
+    	APIClient.setBasicAuth("mobileApplication","hupad8uC");
+    	APIClient.post("game/evacuation", null, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(JSONObject data) {
+            	try {
+	                boolean ok = data.getBoolean("ok");
+	                if (ok) {
+	                	boolean evacuate = data.getBoolean("data");
+	                	if (evacuate) {
+	                		// Switch to the evacuate view
+	                		Intent evacuateIntent = new Intent(getApplicationContext(), Evacuate.class);
+	                    	startActivity(evacuateIntent);
+	                	}
+	                }
+            	}
+            	catch (JSONException e) {
+            		e.printStackTrace();
+            	}
+            }
+            @Override
+            public void onFailure(int statusCode, java.lang.Throwable e, org.json.JSONObject errorResponse) {
+            	// Do nothing
+            }
+        });
+    	View backgroundimage = findViewById(R.id.main_view);
+    	Drawable background = backgroundimage.getBackground();
+    	background.setAlpha(30);
     }
 
 

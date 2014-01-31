@@ -17,6 +17,7 @@ import android.support.v4.app.NavUtils;
 import android.telephony.SmsManager;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 
 public class RecordPost extends Activity {
@@ -35,6 +36,9 @@ public class RecordPost extends Activity {
 		postNumer = (EditText)findViewById(R.id.postNumberInput);
 		postLetter = (EditText)findViewById(R.id.postLettersInput);	
 		pB.setVisibility(View.INVISIBLE);
+    	View backgroundimage = findViewById(R.id.post_view);
+    	Drawable background = backgroundimage.getBackground();
+    	background.setAlpha(30);
 	}
 
 	/**
