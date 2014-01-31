@@ -2,6 +2,13 @@ package com.equinoxchallenge;
 
 import java.util.Date;
 import java.util.Locale;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -21,6 +28,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
@@ -34,9 +42,17 @@ import android.widget.Toast;
 public class Settings extends Activity {
 
     // Handles to UI widgets
-    private LocationInfo locationInfo;
+    public LocationInfo locationInfo;
     private static final String PHONENUMBER = "phoneNumber";
-   	
+    private String fixTime;
+   	public static final String LOCATION_FILE = "locationFile"; 
+    
+    public Settings() {
+    	if(locationInfo != null){
+			updateLocation();
+		}
+    }
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -154,7 +170,7 @@ public class Settings extends Activity {
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.UK);
 		dateFormatter.setLenient(false);
 		Date today = new Date();
-		String fixTime = dateFormatter.format(today);
+		fixTime = dateFormatter.format(today);
 		boolean cached = true;
 		RequestParams params = new RequestParams();
 		// add parameter mobileNumber
@@ -169,22 +185,38 @@ public class Settings extends Activity {
     	APIClient.setBasicAuth("mobileApplication","hupad8uC");
     	APIClient.post("team/location", params, new JsonHttpResponseHandler() {
             @Override
-            public void onSuccess(JSONObject data) {
+            public void onSuccess(JSONObject data) {        		
             	try {
 	                boolean ok = data.getBoolean("ok");
 	                if (ok) {
-                		// saveLocation(Float.toString(locationInfo.lastLat),Float.toString(locationInfo.lastLng),fixTime,false);
+	                	saveLocation(Float.toString(locationInfo.lastLat),Float.toString(locationInfo.lastLong),fixTime,false);
 	                }
             	}
             	catch (JSONException e) {
             		e.printStackTrace();
             	}
             }
-            @Override
+           
+			@Override
             public void onFailure(int statusCode, java.lang.Throwable e, org.json.JSONObject errorResponse) {
-            	// saveLocation(Float.toString(locationInfo.lastLat),Float.toString(locationInfo.lastLng),fixTime,true);
+            	saveLocation(Float.toString(locationInfo.lastLat),Float.toString(locationInfo.lastLong),fixTime,true);
             }
         });
+	}
+	
+	 private void saveLocation(String lat, String lng, String fixTime, boolean fail) {
+		 if (fail) {
+			 try {
+				String csv = lat + "," + lng + "," + fixTime + System.getProperty("line.separator");
+				FileOutputStream fos = openFileOutput(LOCATION_FILE, MODE_APPEND);
+				fos.write(csv.getBytes());
+				fos.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+				Log.d("EquinoxChallenge", "write problem");
+			}
+		 }
+				 
 	}
 	
 	//Click start updates button
@@ -234,4 +266,5 @@ public class Settings extends Activity {
             }
         });
     }
+    
 }

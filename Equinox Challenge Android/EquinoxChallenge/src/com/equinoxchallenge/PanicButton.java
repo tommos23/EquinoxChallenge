@@ -1,5 +1,8 @@
 package com.equinoxchallenge;
 
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+
 import com.littlefluffytoys.littlefluffylocationlibrary.LocationInfo;
 import com.littlefluffytoys.littlefluffylocationlibrary.LocationLibrary;
 
@@ -17,8 +20,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 
 public class PanicButton extends Activity {
-
-	private LocationInfo locationInfo;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -26,16 +27,6 @@ public class PanicButton extends Activity {
 		setContentView(R.layout.activity_panic_button);
 		// Show the Up button in the action bar.
 		setupActionBar();
-		if(locationInfo != null){
-			try{        	
-	        	LocationLibrary.initialiseLibrary(getBaseContext(),60 * 1000, 2 * 60 * 1000, "com.equinoxchallenge");
-	        } catch (UnsupportedOperationException ex) {
-	            Log.d("EquinoxChallenge", "UnsupportedOperationException thrown - the device doesn't have any location providers");
-	            Toast.makeText(this, "The device doesn't have any location providers", Toast.LENGTH_LONG).show();
-	        }
-			locationInfo = new LocationInfo(this);
-			LocationLibrary.forceLocationUpdate(PanicButton.this);	
-		}
     	View backgroundimage = findViewById(R.id.panic_view);
     	Drawable background = backgroundimage.getBackground();
     	background.setAlpha(30);
@@ -76,21 +67,34 @@ public class PanicButton extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	public void sendHelp(View view) {
-		if (locationInfo.anyLocationDataReceived()) {
-			String locationLat = Float.toString(locationInfo.lastLat);
-			String locationLng = Float.toString(locationInfo.lastLong);
-			sendSMS("07598782774", "Emerg:" + locationLat + "," + locationLng);
-			Toast.makeText(this, "Help is on its way", Toast.LENGTH_LONG).show();
-		} else {
-			sendSMS("07598782774", "Emerg:NODATA");
-			Toast.makeText(this, "Help is on its way", Toast.LENGTH_LONG).show();
-		}
+	@SuppressWarnings("deprecation")
+	public void sendHelp(View v) {
+		 try {
+			 FileInputStream fis;
+			 String strLine = null;
+		     fis = openFileInput(Settings.LOCATION_FILE);
+		     DataInputStream dataIO = new DataInputStream(fis);
+		     String fnStr = null;
+		     while ((strLine = dataIO.readLine()) != null) {
+		    	 Log.d("EquinoxChallenge", strLine);
+		    	 fnStr = strLine;
+		     }
+		     if (fnStr != null) {
+		    	 sendSMS("07537410103", "Emerg:" + fnStr);	 
+		     }
+		     dataIO.close();
+		     fis.close(); 
+		     Toast.makeText(this, "Help is on its way", Toast.LENGTH_LONG).show();
+		 }
+		 catch  (Exception e) {  
+		 }
 	}
 	
 	private void sendSMS(String phoneNumber, String message) {
     	SmsManager sms = SmsManager.getDefault();
     	sms.sendTextMessage(phoneNumber, null, message, null, null);
     }
+	
+	
 
 }
