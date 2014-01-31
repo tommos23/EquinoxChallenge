@@ -1,22 +1,40 @@
 package com.equinoxchallenge;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 import android.support.v4.app.NavUtils;
+import android.telephony.SmsManager;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 
 public class RecordPost extends Activity {
 
+	private ProgressBar pB;
+	private EditText postNumer;
+	private EditText postLetter;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_record_post);
 		// Show the Up button in the action bar.
 		setupActionBar();
+		pB = (ProgressBar)findViewById(R.id.saveProgress);
+		postNumer = (EditText)findViewById(R.id.postNumberInput);
+		postLetter = (EditText)findViewById(R.id.postLettersInput);	
+		pB.setVisibility(View.INVISIBLE);
 	}
 
 	/**
@@ -53,5 +71,30 @@ public class RecordPost extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	
+	public void savePost(View view) {
+		pB.setVisibility(View.VISIBLE);
+		String postNum = postNumer.getText().toString();
+		String postLet = postLetter.getText().toString();
+		if((postNum != null && !postNum.isEmpty()) &&  (postLet != null && !postLet.isEmpty())) {
+			DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.UK);
+			dateFormatter.setLenient(false);
+			Date today = new Date();
+			String fixTime = dateFormatter.format(today);
+			
+			sendSMS("07537410103", postNum + " " + postLet + " " + fixTime);
+			Toast.makeText(this, "Sent", Toast.LENGTH_LONG).show();
+		} else {
+			Toast.makeText(this, "Please Fill in both values", Toast.LENGTH_LONG).show();
+		}
+		pB.setVisibility(View.INVISIBLE);		
+	}
+	
+	private void sendSMS(String phoneNumber, String message) {
+    	SmsManager sms = SmsManager.getDefault();
+    	sms.sendTextMessage(phoneNumber, null, message, null, null);
+    }
+	
 
 }

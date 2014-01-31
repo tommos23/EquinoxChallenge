@@ -1,21 +1,40 @@
 package com.equinoxchallenge;
 
+import com.littlefluffytoys.littlefluffylocationlibrary.LocationInfo;
+import com.littlefluffytoys.littlefluffylocationlibrary.LocationLibrary;
+
 import android.os.Bundle;
 import android.app.Activity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 import android.support.v4.app.NavUtils;
+import android.telephony.SmsManager;
 import android.annotation.TargetApi;
 import android.os.Build;
 
 public class PanicButton extends Activity {
 
+	private LocationInfo locationInfo;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_panic_button);
 		// Show the Up button in the action bar.
 		setupActionBar();
+		if(locationInfo != null){
+			try{        	
+	        	LocationLibrary.initialiseLibrary(getBaseContext(),60 * 1000, 2 * 60 * 1000, "com.equinoxchallenge");
+	        } catch (UnsupportedOperationException ex) {
+	            Log.d("EquinoxChallenge", "UnsupportedOperationException thrown - the device doesn't have any location providers");
+	            Toast.makeText(this, "The device doesn't have any location providers", Toast.LENGTH_LONG).show();
+	        }
+			locationInfo = new LocationInfo(this);
+			LocationLibrary.forceLocationUpdate(PanicButton.this);	
+		}
 	}
 
 	/**
@@ -51,5 +70,22 @@ public class PanicButton extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	public void sendHelp(View view) {
+		if (locationInfo.anyLocationDataReceived()) {
+			String locationLat = Float.toString(locationInfo.lastLat);
+			String locationLng = Float.toString(locationInfo.lastLong);
+			sendSMS("07598782774", "Emerg:" + locationLat + "," + locationLng);
+			Toast.makeText(this, "Help is on its way", Toast.LENGTH_LONG).show();
+		} else {
+			sendSMS("07598782774", "Emerg:NODATA");
+			Toast.makeText(this, "Help is on its way", Toast.LENGTH_LONG).show();
+		}
+	}
+	
+	private void sendSMS(String phoneNumber, String message) {
+    	SmsManager sms = SmsManager.getDefault();
+    	sms.sendTextMessage(phoneNumber, null, message, null, null);
+    }
 
 }
