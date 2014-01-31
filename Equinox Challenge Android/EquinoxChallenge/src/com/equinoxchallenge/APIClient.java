@@ -1,9 +1,11 @@
 package com.equinoxchallenge;
 
+import android.util.Log;
+
 import com.loopj.android.http.*;
 
 public class APIClient {
-	private static final String BASE_URL = "http://my.equinoxchallenge.com/api/";
+	private static final String BASE_URL = "https://my.equinoxchallenge.com/api/";
 
 	private static AsyncHttpClient client = new AsyncHttpClient();
 
@@ -18,4 +20,10 @@ public class APIClient {
 	private static String getAbsoluteUrl(String relativeUrl) {
 	    return BASE_URL + relativeUrl;
 	}
+
+	public static void setBasicAuth(String username, String password) {
+		client.setBasicAuth(username, password);
+	}
+	
+	
 }

@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.support.v4.app.NavUtils;
 import android.annotation.TargetApi;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 
 public class Evacuate extends Activity {
@@ -16,6 +18,9 @@ public class Evacuate extends Activity {
 		setContentView(R.layout.activity_evacuate);
 		// Show the Up button in the action bar.
 		setupActionBar();
+    	View backgroundimage = findViewById(R.id.evacuate_view);
+    	Drawable background = backgroundimage.getBackground();
+    	background.setAlpha(30);
 	}
 
 	/**

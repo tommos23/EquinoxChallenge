@@ -13,6 +13,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,10 +27,9 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);    
-        AsyncHttpClient client = new AsyncHttpClient();
-    	client.setBasicAuth("mobileApplication","hupad8uC");
-    	client.get("game/evacuation", null, new JsonHttpResponseHandler() {
+        setContentView(R.layout.activity_main);
+    	APIClient.setBasicAuth("mobileApplication","hupad8uC");
+    	APIClient.post("game/evacuation", null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(JSONObject data) {
             	try {
@@ -51,6 +52,9 @@ public class MainActivity extends Activity {
             	// Do nothing
             }
         });
+    	View backgroundimage = findViewById(R.id.main_view);
+    	Drawable background = backgroundimage.getBackground();
+    	background.setAlpha(30);
     }
 
 

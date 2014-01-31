@@ -18,6 +18,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.telephony.TelephonyManager;
@@ -47,6 +48,9 @@ public class Settings extends Activity {
 			updateLocation();
 		}
 		displayPhoneNumber();
+    	View backgroundimage = findViewById(R.id.settings_view);
+    	Drawable background = backgroundimage.getBackground();
+    	background.setAlpha(30);
 	}
 
 	/**
@@ -152,9 +156,18 @@ public class Settings extends Activity {
 		Date today = new Date();
 		String fixTime = dateFormatter.format(today);
 		boolean cached = true;
+		RequestParams params = new RequestParams();
+		// add parameter mobileNumber
+		SharedPreferences settings = getSharedPreferences(MainActivity.FILENAME, 0);
+		String returnedValue = "";
+		String pNumber = settings.getString(PHONENUMBER,returnedValue);
+		params.put("mobileNumber", pNumber);
+		params.put("longitude", locationLng);
+		params.put("latitude", locationLat);
+		params.put("fixTime", fixTime);
 		AsyncHttpClient client = new AsyncHttpClient();
-    	client.setBasicAuth("mobileApplication","hupad8uC");
-    	client.get("team/location", null, new JsonHttpResponseHandler() {
+    	APIClient.setBasicAuth("mobileApplication","hupad8uC");
+    	APIClient.post("team/location", params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(JSONObject data) {
             	try {
@@ -186,9 +199,8 @@ public class Settings extends Activity {
     }
     
     public void checkGameStart(View view) throws JSONException {
-    	AsyncHttpClient client = new AsyncHttpClient();
-    	client.setBasicAuth("mobileApplication","hupad8uC");
-    	client.get("game/status", null, new JsonHttpResponseHandler() {
+    	 APIClient.setBasicAuth("mobileApplication","hupad8uC");
+    	 APIClient.post("game/status", null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(JSONObject data) {
             	try {

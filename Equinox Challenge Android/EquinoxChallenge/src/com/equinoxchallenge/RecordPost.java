@@ -4,9 +4,11 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.support.v4.app.NavUtils;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 
 public class RecordPost extends Activity {
@@ -17,6 +19,9 @@ public class RecordPost extends Activity {
 		setContentView(R.layout.activity_record_post);
 		// Show the Up button in the action bar.
 		setupActionBar();
+    	View backgroundimage = findViewById(R.id.post_view);
+    	Drawable background = backgroundimage.getBackground();
+    	background.setAlpha(30);
 	}
 
 	/**

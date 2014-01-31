@@ -27,7 +27,9 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.os.Build;
@@ -42,6 +44,7 @@ public class Photos extends Activity {
 	private Camera camera;
 	private int cameraId = 0;
 	private Preview mPreview;
+    private static final String PHONENUMBER = "phoneNumber";
 	
 	// Variables for network detection
 	ConnectivityManager conMan = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -55,6 +58,10 @@ public class Photos extends Activity {
 		// Show the Up button in the action bar.
 		setupActionBar();
 		setPreview();
+		
+    	View backgroundimage = findViewById(R.id.photoView);
+    	Drawable background = backgroundimage.getBackground();
+    	background.setAlpha(30);
 	}
 	
 	private void setPreview() {
@@ -245,10 +252,15 @@ public class Photos extends Activity {
 				// Ignore missing file
 			}
 			// add parameter caption
+			params.put("caption", "caption");
 			// add parameter mobileNumber
-			AsyncHttpClient client = new AsyncHttpClient();
-	    	client.setBasicAuth("mobileApplication","hupad8uC");
-	    	client.post("game/status", params, new JsonHttpResponseHandler() {
+			SharedPreferences settings = getSharedPreferences(MainActivity.FILENAME, 0);
+			String returnedValue = "";
+			String pNumber = settings.getString(PHONENUMBER,returnedValue);
+			params.put("mobileNumber", pNumber);
+			// Make and send the request
+	    	APIClient.setBasicAuth("mobileApplication","hupad8uC");
+	    	APIClient.post("game/image/upload", params, new JsonHttpResponseHandler() {
 	            @Override
 	            public void onSuccess(JSONObject data) {
 	            	try {
