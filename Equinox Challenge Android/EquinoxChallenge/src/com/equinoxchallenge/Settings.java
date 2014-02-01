@@ -107,34 +107,19 @@ public class Settings extends Activity {
 		{
 			String mPhoneNumber = ((TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
 			if(mPhoneNumber == null || mPhoneNumber.isEmpty()) {
-				//no number found ask 
-				EditText phoneText = (EditText)findViewById(R.id.enterPhoneNumberID);
-				phoneText.setVisibility(View.VISIBLE);
-				Button enterNumber = (Button)findViewById(R.id.phoneEnterButtonID);
-				enterNumber.setVisibility(View.VISIBLE);
-				TextView phoneN = (TextView) findViewById(R.id.phoneNumberID);
-				phoneN.setVisibility(View.GONE);
+				//no number found
 			} else {
-				TextView phoneN = (TextView) findViewById(R.id.phoneNumberID);
-				phoneN.setText(mPhoneNumber);
 				EditText phoneText = (EditText)findViewById(R.id.enterPhoneNumberID);
-				phoneText.setVisibility(View.GONE);
-				Button enterNumber = (Button)findViewById(R.id.phoneEnterButtonID);
-				enterNumber.setVisibility(View.GONE);
-	
-				
+				phoneText.setText(mPhoneNumber);
+
 				editPref.putString(PHONENUMBER,mPhoneNumber);
 				editPref.commit();
 			}
 		}
 		else
 		{
-			TextView phoneN = (TextView) findViewById(R.id.phoneNumberID);
-			phoneN.setText(pNumber);
 			EditText phoneText = (EditText)findViewById(R.id.enterPhoneNumberID);
-			phoneText.setVisibility(View.GONE);
-			Button enterNumber = (Button)findViewById(R.id.phoneEnterButtonID);
-			enterNumber.setVisibility(View.GONE);
+			phoneText.setText(pNumber);
 		}
 	}
 	
@@ -144,17 +129,12 @@ public class Settings extends Activity {
 		SharedPreferences.Editor editPref = settings.edit();
 		
     	EditText phoneText = (EditText)findViewById(R.id.enterPhoneNumberID);
-    	phoneText.setVisibility(View.GONE);
     	
     	editPref.putString(PHONENUMBER, phoneText.getText().toString());
     	editPref.commit();
     	
-    	TextView phoneN = (TextView) findViewById(R.id.phoneNumberID);
-		phoneN.setText(phoneText.getText().toString());
-			
-		Button enterNumber = (Button)findViewById(R.id.phoneEnterButtonID);
-		enterNumber.setVisibility(View.GONE);
-    	
+    	Toast toast = Toast.makeText(getApplicationContext(), "Phone number saved.", Toast.LENGTH_SHORT);
+		toast.show();
     }
 	
 	

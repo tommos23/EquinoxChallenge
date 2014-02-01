@@ -11,11 +11,11 @@
     tools:context=".Settings" >
 
     <TextView
-    android:id="@+id/label_lat_lng"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="@string/latlng"
-    android:textSize="20sp" />
+        android:id="@+id/label_lat_lng"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/latlng"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/lat_lng"
@@ -49,9 +49,8 @@
         android:id="@+id/latText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/lat_lng"
-        android:layout_alignBottom="@+id/lat_lng"
-        android:layout_toRightOf="@+id/label_lat_lng"
+        android:layout_alignLeft="@+id/label_lat_lng"
+        android:layout_alignTop="@+id/address"
         android:text="@string/unknown"
         android:textIsSelectable="true" />
 
@@ -59,61 +58,50 @@
         android:id="@+id/longText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/latText"
-        android:layout_below="@+id/label_lat_lng"
+        android:layout_alignLeft="@+id/label_lat_lng"
+        android:layout_below="@+id/latText"
         android:text="@string/unknown"
         android:textIsSelectable="true" />
-
-    <Button
-        android:id="@+id/start_updates"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/label_lat_lng"
-        android:layout_below="@+id/address"
-        android:layout_marginTop="64dp"
-        android:onClick="checkGameStart"
-        android:text="@string/start_updates" />
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/label_lat_lng"
-        android:layout_below="@+id/address"
+        android:layout_alignLeft="@+id/longText"
+        android:layout_below="@+id/longText"
         android:text="@string/phoneNumber"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/phoneNumberID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView1"
-        android:layout_alignBottom="@+id/textView1"
-        android:layout_toRightOf="@+id/textView1"
-        android:text="@string/unknown"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-    <Button
-        android:id="@+id/phoneEnterButtonID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/enterPhoneNumberID"
-        android:layout_alignTop="@+id/enterPhoneNumberID"
-        android:layout_toRightOf="@+id/enterPhoneNumberID"
-        android:onClick="enterPhoneNumber"
-        android:text="@string/enter" />
 
     <EditText
         android:id="@+id/enterPhoneNumberID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/phoneNumberID"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_below="@+id/textView1"
         android:ems="10"
         android:inputType="phone"
         android:text="@string/enterPhoneNumber" >
 
         <requestFocus />
     </EditText>
+
+    <Button
+        android:id="@+id/start_updates"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/enterPhoneNumberID"
+        android:layout_below="@+id/phoneEnterButtonID"
+        android:onClick="checkGameStart"
+        android:text="@string/start_updates" />
+
+    <Button
+        android:id="@+id/phoneEnterButtonID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/enterPhoneNumberID"
+        android:layout_alignBottom="@+id/enterPhoneNumberID"
+        android:layout_toRightOf="@+id/enterPhoneNumberID"
+        android:onClick="enterPhoneNumber"
+        android:text="@string/enter" />
 
 </RelativeLayout>
