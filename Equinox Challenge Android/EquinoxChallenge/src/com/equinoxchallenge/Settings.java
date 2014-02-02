@@ -184,30 +184,15 @@ public class Settings extends Activity {
 	}
 	
 	 private void saveLocation(String lat, String lng, String fixTime, boolean fail) {
-<<<<<<< HEAD
 		 try {
 			String csv = lat + "," + lng + "," + fixTime + "," + fail + System.getProperty("line.separator");
 			FileOutputStream fos = openFileOutput(LOCATION_FILE, MODE_APPEND);
 			fos.write(csv.getBytes());
 			fos.close();
-		} catch (IOException e) {
+		 } catch (IOException e) {
 			e.printStackTrace();
-			Log.d("EquinoxChallenge", "write problem");
-		}				 
-=======
-		 if (fail) {
-			 try {
-				String csv = lat + "," + lng + "," + fixTime + System.getProperty("line.separator");
-				FileOutputStream fos = openFileOutput(LOCATION_FILE, MODE_APPEND);
-				fos.write(csv.getBytes());
-				fos.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		 }
-				 
->>>>>>> 4ba6c6602e08795c1fa34997b8bbbf9df56a6dcb
-	}
+		 }				 
+	 }
 	
 	//Click start updates button
     public void startUpdates() {
