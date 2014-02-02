@@ -30,7 +30,6 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -108,34 +107,19 @@ public class Settings extends Activity {
 		{
 			String mPhoneNumber = ((TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
 			if(mPhoneNumber == null || mPhoneNumber.isEmpty()) {
-				//no number found ask 
-				EditText phoneText = (EditText)findViewById(R.id.enterPhoneNumberID);
-				phoneText.setVisibility(View.VISIBLE);
-				Button enterNumber = (Button)findViewById(R.id.phoneEnterButtonID);
-				enterNumber.setVisibility(View.VISIBLE);
-				TextView phoneN = (TextView) findViewById(R.id.phoneNumberID);
-				phoneN.setVisibility(View.GONE);
+				//no number found
 			} else {
-				TextView phoneN = (TextView) findViewById(R.id.phoneNumberID);
-				phoneN.setText(mPhoneNumber);
 				EditText phoneText = (EditText)findViewById(R.id.enterPhoneNumberID);
-				phoneText.setVisibility(View.GONE);
-				Button enterNumber = (Button)findViewById(R.id.phoneEnterButtonID);
-				enterNumber.setVisibility(View.GONE);
-	
-				
+				phoneText.setText(mPhoneNumber);
+
 				editPref.putString(PHONENUMBER,mPhoneNumber);
 				editPref.commit();
 			}
 		}
 		else
 		{
-			TextView phoneN = (TextView) findViewById(R.id.phoneNumberID);
-			phoneN.setText(pNumber);
 			EditText phoneText = (EditText)findViewById(R.id.enterPhoneNumberID);
-			phoneText.setVisibility(View.GONE);
-			Button enterNumber = (Button)findViewById(R.id.phoneEnterButtonID);
-			enterNumber.setVisibility(View.GONE);
+			phoneText.setText(pNumber);
 		}
 	}
 	
@@ -145,17 +129,12 @@ public class Settings extends Activity {
 		SharedPreferences.Editor editPref = settings.edit();
 		
     	EditText phoneText = (EditText)findViewById(R.id.enterPhoneNumberID);
-    	phoneText.setVisibility(View.GONE);
     	
     	editPref.putString(PHONENUMBER, phoneText.getText().toString());
     	editPref.commit();
     	
-    	TextView phoneN = (TextView) findViewById(R.id.phoneNumberID);
-		phoneN.setText(phoneText.getText().toString());
-			
-		Button enterNumber = (Button)findViewById(R.id.phoneEnterButtonID);
-		enterNumber.setVisibility(View.GONE);
-    	
+    	Toast toast = Toast.makeText(getApplicationContext(), "Phone number saved.", Toast.LENGTH_SHORT);
+		toast.show();
     }
 	
 	
@@ -205,6 +184,7 @@ public class Settings extends Activity {
 	}
 	
 	 private void saveLocation(String lat, String lng, String fixTime, boolean fail) {
+<<<<<<< HEAD
 		 try {
 			String csv = lat + "," + lng + "," + fixTime + "," + fail + System.getProperty("line.separator");
 			FileOutputStream fos = openFileOutput(LOCATION_FILE, MODE_APPEND);
@@ -214,6 +194,19 @@ public class Settings extends Activity {
 			e.printStackTrace();
 			Log.d("EquinoxChallenge", "write problem");
 		}				 
+=======
+		 if (fail) {
+			 try {
+				String csv = lat + "," + lng + "," + fixTime + System.getProperty("line.separator");
+				FileOutputStream fos = openFileOutput(LOCATION_FILE, MODE_APPEND);
+				fos.write(csv.getBytes());
+				fos.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		 }
+				 
+>>>>>>> 4ba6c6602e08795c1fa34997b8bbbf9df56a6dcb
 	}
 	
 	//Click start updates button
@@ -223,8 +216,11 @@ public class Settings extends Activity {
         	locationInfo = new LocationInfo(getBaseContext());
         	updateLocation();
         } catch (UnsupportedOperationException ex) {
-            Log.d("EquinoxChallenge", "UnsupportedOperationException thrown - the device doesn't have any location providers");
         }    	
+    }
+    
+    public void stopUpdates() {
+    	locationInfo = null;
     }
     
     public void checkGameStart(View view) throws JSONException {
@@ -242,7 +238,7 @@ public class Settings extends Activity {
 	                		toast.show();
 	                	}
 	                	else {
-	                		// stopUpdates();
+	                		stopUpdates();
 	                		Toast toast = Toast.makeText(getApplicationContext(), "The game isn't running, tracking disabled.", Toast.LENGTH_SHORT);
 	                		toast.show();
 	                	}

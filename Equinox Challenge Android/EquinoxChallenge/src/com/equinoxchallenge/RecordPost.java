@@ -82,7 +82,7 @@ public class RecordPost extends Activity {
 		String postNum = postNumer.getText().toString();
 		String postLet = postLetter.getText().toString();
 		if((postNum != null && !postNum.isEmpty()) &&  (postLet != null && !postLet.isEmpty())) {
-			DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.UK);
+			DateFormat dateFormatter = new SimpleDateFormat("hhmm", Locale.UK);
 			dateFormatter.setLenient(false);
 			Date today = new Date();
 			String fixTime = dateFormatter.format(today);

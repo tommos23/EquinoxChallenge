@@ -14,7 +14,6 @@ import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.util.Log;
 import android.widget.Toast;
 
 @SuppressLint("SimpleDateFormat")
@@ -55,7 +54,6 @@ class savePhoto extends AsyncTask<String, Void, String> {
 		File pictureFileDir = getDir();
 
 	    if (!pictureFileDir.exists() && !pictureFileDir.mkdirs()) {
-	      Log.d(Photos.DEBUG_TAG, "Can't create directory to save image.");
 	      Toast.makeText(context, "Can't create directory to save image.", Toast.LENGTH_LONG).show();
 	      cancel(true);
 	      return "failed to save";
@@ -73,7 +71,6 @@ class savePhoto extends AsyncTask<String, Void, String> {
 	        fos.write(data);
 	        fos.close(); 
 	      } catch (Exception error) {
-	        Log.d(Photos.DEBUG_TAG, "File" + filename + " not saved: " + error.getMessage()); 
 	        cancel(true);     
 	      } 
 		return null;
@@ -82,7 +79,6 @@ class savePhoto extends AsyncTask<String, Void, String> {
 	@Override
 	protected void onPostExecute(String result) {
 		super.onPostExecute(result);
-		Log.d(Photos.DEBUG_TAG, "File saved");
 		Toast.makeText(context, "New Image saved", Toast.LENGTH_LONG).show();
 		Intent intent = new Intent(context.getApplicationContext(), PhotoGallery.class);
 		context.getApplicationContext().startActivity(intent);  	

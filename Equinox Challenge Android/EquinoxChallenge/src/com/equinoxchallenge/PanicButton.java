@@ -8,7 +8,6 @@ import com.littlefluffytoys.littlefluffylocationlibrary.LocationLibrary;
 
 import android.os.Bundle;
 import android.app.Activity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -76,7 +75,6 @@ public class PanicButton extends Activity {
 		     DataInputStream dataIO = new DataInputStream(fis);
 		     String fnStr = null;
 		     while ((strLine = dataIO.readLine()) != null) {
-		    	 Log.d("EquinoxChallenge", strLine);
 		    	 fnStr = strLine;
 		     }
 		     if (fnStr != null) {

@@ -1,7 +1,5 @@
 package com.equinoxchallenge;
 
-import android.util.Log;
-
 import com.loopj.android.http.*;
 
 public class APIClient {
