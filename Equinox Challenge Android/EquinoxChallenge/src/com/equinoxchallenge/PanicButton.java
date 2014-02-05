@@ -77,12 +77,19 @@ public class PanicButton extends Activity {
 		     while ((strLine = dataIO.readLine()) != null) {
 		    	 fnStr = strLine;
 		     }
-		     if (fnStr != null) {
+		     if (fnStr != null && fnStr.length() > 0) {
+		    	 // Cut date out of string
+		    	 int endIndex = fnStr.lastIndexOf(",");
+		    	 fnStr = fnStr.substring(0, endIndex -1);
+		    	 // Send text
 		    	 sendSMS("07537410103", "Emerg:" + fnStr);	 
+			     Toast.makeText(this, "Help is on its way", Toast.LENGTH_LONG).show();
+		     }
+		     else {
+		    	 Toast.makeText(this, "Locations must be recorded in settings first", Toast.LENGTH_LONG).show();
 		     }
 		     dataIO.close();
 		     fis.close(); 
-		     Toast.makeText(this, "Help is on its way", Toast.LENGTH_LONG).show();
 		 }
 		 catch  (Exception e) {  
 		 }

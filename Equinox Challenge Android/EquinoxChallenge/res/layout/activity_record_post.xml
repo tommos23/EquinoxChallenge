@@ -67,7 +67,8 @@
         android:layout_alignLeft="@+id/textView3"
         android:layout_below="@+id/textView3"
         android:ems="10"
-        android:inputType="text" />
+        android:inputType="textFilter"
+        android:maxLength="1" />
 
     <ProgressBar
         android:id="@+id/saveProgress"
