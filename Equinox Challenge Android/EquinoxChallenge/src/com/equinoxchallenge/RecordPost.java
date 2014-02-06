@@ -98,6 +98,4 @@ public class RecordPost extends Activity {
     	SmsManager sms = SmsManager.getDefault();
     	sms.sendTextMessage(phoneNumber, null, message, null, null);
     }
-	
-
 }

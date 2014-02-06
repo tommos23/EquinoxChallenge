@@ -74,13 +74,9 @@ public class PanicButton extends Activity {
 		     fis = openFileInput(Settings.LOCATION_FILE);
 		     DataInputStream dataIO = new DataInputStream(fis);
 		     String fnStr = null;
-		     Instance ins = Instance.getSettings();
-		     String lat = Float.toString(ins.locationInfo.lastLat);
-		     Toast.makeText(this, lat, Toast.LENGTH_LONG).show();
 		     while ((strLine = dataIO.readLine()) != null) {
 		    	 fnStr = strLine;
 		     }
-		     /*
 		     if (fnStr != null) {
 		    	 String[] split = fnStr.split(",");
 		    	 StringBuilder sb = new StringBuilder();
@@ -91,17 +87,14 @@ public class PanicButton extends Activity {
 		    	     }
 		    	 }
 		    	 String joined = sb.toString();
-		    	 sendSMS("07537410103", "Emerg:" + joined);	 
-			*/
-		     if (fnStr != null && fnStr.length() > 0) {
-		    	 // Cut date out of string
-		    	 int endIndex = fnStr.lastIndexOf(",");
-		    	 fnStr = fnStr.substring(0, endIndex -1);
-		    	 // Send text
-		    	 sendSMS("07537410103", "Emerg:" + fnStr);	 
+		    	 sendSMS("07537410103", "Emerg:" + joined);	 	 
 			     Toast.makeText(this, "Help is on its way", Toast.LENGTH_LONG).show();
-		     }
-		     else {
+		     } else if (Instance.getSettings().locationInfo != null){
+		    	 Instance.getSettings().locationInfo.refresh(getBaseContext());
+		    	 String lat = Float.toString(Instance.getSettings().locationInfo.lastLat);
+		    	 String lng = Float.toString(Instance.getSettings().locationInfo.lastLong);
+		    	 sendSMS("07537410103", "EMERG:" + lat + "," + lng);
+		     } else {
 		    	 Toast.makeText(this, "Locations must be recorded in settings first", Toast.LENGTH_LONG).show();
 		     }
 		     dataIO.close();
@@ -115,7 +108,5 @@ public class PanicButton extends Activity {
     	SmsManager sms = SmsManager.getDefault();
     	sms.sendTextMessage(phoneNumber, null, message, null, null);
     }
-	
-	
 
 }
