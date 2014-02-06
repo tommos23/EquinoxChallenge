@@ -57,7 +57,7 @@
     <string name="panic">Panic Button</string>
     <string name="title_activity_record_post">RecordPost</string>
     <string name="postNumber">Post Number</string>
-    <string name="postLetters">Post Letters</string>
+    <string name="postLetters">Post Letter</string>
     <string name="save">Save</string>
     <string name="title_activity_photos">Photos</string>
     <string name="title_activity_panic_button">Panic Button</string>
