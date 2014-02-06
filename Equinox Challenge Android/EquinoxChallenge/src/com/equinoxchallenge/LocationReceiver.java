@@ -10,10 +10,9 @@ import android.content.Intent;
 public class LocationReceiver extends BroadcastReceiver {
 
 	private Settings set;
-	
+	//65 58
 	@Override
-	public void onReceive(Context context, Intent intent) {
-		
+	public void onReceive(Context context, Intent intent) {		
 		final LocationInfo locationInfo = (LocationInfo) intent.getSerializableExtra(LocationLibraryConstants.LOCATION_BROADCAST_EXTRA_LOCATIONINFO);
 		set.updateLocation();
 	}

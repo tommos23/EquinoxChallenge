@@ -74,11 +74,23 @@ public class PanicButton extends Activity {
 		     fis = openFileInput(Settings.LOCATION_FILE);
 		     DataInputStream dataIO = new DataInputStream(fis);
 		     String fnStr = null;
+		     Instance ins = Instance.getSettings();
+		     String lat = Float.toString(ins.locationInfo.lastLat);
+		     Toast.makeText(this, lat, Toast.LENGTH_LONG).show();
 		     while ((strLine = dataIO.readLine()) != null) {
 		    	 fnStr = strLine;
 		     }
 		     if (fnStr != null) {
-		    	 sendSMS("07537410103", "Emerg:" + fnStr);	 
+		    	 String[] split = fnStr.split(",");
+		    	 StringBuilder sb = new StringBuilder();
+		    	 for (int i = 0; i < 2; i++) {
+		    	     sb.append(split[i]);
+		    	     if (i != split.length - 1) {
+		    	         sb.append(" ");
+		    	     }
+		    	 }
+		    	 String joined = sb.toString();
+		    	 sendSMS("07537410103", "Emerg:" + joined);	 
 		     }
 		     dataIO.close();
 		     fis.close(); 

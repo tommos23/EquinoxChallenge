@@ -2,12 +2,7 @@ package com.equinoxchallenge;
 
 import java.util.Date;
 import java.util.Locale;
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -26,14 +21,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
-import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,16 +32,13 @@ import android.widget.Toast;
 public class Settings extends Activity {
 
     // Handles to UI widgets
-    public LocationInfo locationInfo;
     private static final String PHONENUMBER = "phoneNumber";
     private String fixTime;
    	public static final String LOCATION_FILE = "locationFile"; 
     
     public Settings() {
-    	if(locationInfo != null){
-			updateLocation();
-		}
-    }
+    	
+    }  
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +47,7 @@ public class Settings extends Activity {
 		setContentView(R.layout.activity_settings);
 		// Show the Up button in the action bar.
 		setupActionBar();
-		if(locationInfo != null){
+		if(Instance.getSettings().locationInfo != null){
 			updateLocation();
 		}
 		displayPhoneNumber();
@@ -139,11 +127,11 @@ public class Settings extends Activity {
 	
 	
 	public void updateLocation() {
-		locationInfo.refresh(getBaseContext());
-		String locationLat = Float.toString(locationInfo.lastLat);
+		Instance.getSettings().locationInfo.refresh(getBaseContext());
+		String locationLat = Float.toString(Instance.getSettings().locationInfo.lastLat);
 		TextView lat = (TextView) findViewById(R.id.latText);
 		lat.setText(locationLat);
-		String locationLng = Float.toString(locationInfo.lastLong);
+		String locationLng = Float.toString(Instance.getSettings().locationInfo.lastLong);
 		TextView lng = (TextView) findViewById(R.id.longText);
 		lng.setText(locationLng);
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.UK);
@@ -168,7 +156,7 @@ public class Settings extends Activity {
             	try {
 	                boolean ok = data.getBoolean("ok");
 	                if (ok) {
-	                	saveLocation(Float.toString(locationInfo.lastLat),Float.toString(locationInfo.lastLong),fixTime,false);
+	                	saveLocation(Float.toString(Instance.getSettings().locationInfo.lastLat),Float.toString(Instance.getSettings().locationInfo.lastLong),fixTime,false);
 	                }
             	}
             	catch (JSONException e) {
@@ -178,7 +166,7 @@ public class Settings extends Activity {
            
 			@Override
             public void onFailure(int statusCode, java.lang.Throwable e, org.json.JSONObject errorResponse) {
-            	saveLocation(Float.toString(locationInfo.lastLat),Float.toString(locationInfo.lastLong),fixTime,true);
+            	saveLocation(Float.toString(Instance.getSettings().locationInfo.lastLat),Float.toString(Instance.getSettings().locationInfo.lastLong),fixTime,true);
             }
         });
 	}
@@ -198,14 +186,18 @@ public class Settings extends Activity {
     public void startUpdates() {
     	try{        	
         	LocationLibrary.initialiseLibrary(getBaseContext(), LocationUtils.FAST_CEILING_IN_SECONDS, LocationUtils.UPDATE_INTERVAL_IN_SECONDS, "com.equinoxchallenge");
-        	locationInfo = new LocationInfo(getBaseContext());
+        	LocationLibrary.useFineAccuracyForRequests(true);
+        	//LocationLibrary.startAlarmAndListener(getBaseContext());
+        	Instance.getSettings().locationInfo = new LocationInfo(getBaseContext());
         	updateLocation();
         } catch (UnsupportedOperationException ex) {
+        	Toast.makeText(getApplicationContext(), "There was a problem, you do not have location turned on.", Toast.LENGTH_LONG).show();
         }    	
     }
     
     public void stopUpdates() {
-    	locationInfo = null;
+    	LocationLibrary.stopAlarmAndListener(getBaseContext());
+    	Instance.getSettings().locationInfo = null;
     }
     
     public void checkGameStart(View view) throws JSONException {

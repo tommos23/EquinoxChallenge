@@ -85,8 +85,7 @@ public class RecordPost extends Activity {
 			DateFormat dateFormatter = new SimpleDateFormat("hhmm", Locale.UK);
 			dateFormatter.setLenient(false);
 			Date today = new Date();
-			String fixTime = dateFormatter.format(today);
-			
+			String fixTime = dateFormatter.format(today);			
 			sendSMS("07537410103", postNum + " " + postLet + " " + fixTime);
 			Toast.makeText(this, "Sent", Toast.LENGTH_LONG).show();
 		} else {
