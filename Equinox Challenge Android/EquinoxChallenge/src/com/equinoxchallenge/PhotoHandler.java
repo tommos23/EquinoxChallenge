@@ -65,7 +65,8 @@ class savePhoto extends AsyncTask<String, Void, String> {
 	    
 	    String filename = pictureFileDir.getPath() + File.separator + photoFile;
 	    File pictureFile = new File(filename);
-	    
+	    Instance.getSettings(context).pFileName = filename;
+	    Instance i = Instance.getSettings(context);
 	    try {
 	        FileOutputStream fos = new FileOutputStream(pictureFile);
 	        fos.write(data);
@@ -80,8 +81,7 @@ class savePhoto extends AsyncTask<String, Void, String> {
 	protected void onPostExecute(String result) {
 		super.onPostExecute(result);
 		Toast.makeText(context, "New Image saved", Toast.LENGTH_LONG).show();
-		Intent intent = new Intent(context.getApplicationContext(), PhotoGallery.class);
-		context.getApplicationContext().startActivity(intent);  	
+		Instance.getSettings(context).startGallery(context);
 	}
 	
 	protected void onCancelled(Result r) {

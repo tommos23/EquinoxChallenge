@@ -71,7 +71,7 @@ public class PanicButton extends Activity {
 		 try {
 			 FileInputStream fis;
 			 String strLine = null;
-		     fis = openFileInput(Settings.LOCATION_FILE);
+		     fis = openFileInput(Instance.getSettings(this).LOCATION_FILE);
 		     DataInputStream dataIO = new DataInputStream(fis);
 		     String fnStr = null;
 		     while ((strLine = dataIO.readLine()) != null) {
@@ -89,10 +89,10 @@ public class PanicButton extends Activity {
 		    	 String joined = sb.toString();
 		    	 sendSMS("07537410103", "Emerg:" + joined);	 	 
 			     Toast.makeText(this, "Help is on its way", Toast.LENGTH_LONG).show();
-		     } else if (Instance.getSettings().locationInfo != null){
-		    	 Instance.getSettings().locationInfo.refresh(getBaseContext());
-		    	 String lat = Float.toString(Instance.getSettings().locationInfo.lastLat);
-		    	 String lng = Float.toString(Instance.getSettings().locationInfo.lastLong);
+		     } else if (Instance.getSettings(this).locationInfo != null){
+		    	 Instance.getSettings(this).locationInfo.refresh(getBaseContext());
+		    	 String lat = Float.toString(Instance.getSettings(this).locationInfo.lastLat);
+		    	 String lng = Float.toString(Instance.getSettings(this).locationInfo.lastLong);
 		    	 sendSMS("07537410103", "EMERG:" + lat + "," + lng);
 		     } else {
 		    	 Toast.makeText(this, "Locations must be recorded in settings first", Toast.LENGTH_LONG).show();

@@ -30,12 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class Settings extends Activity {
-
-    // Handles to UI widgets
-    private static final String PHONENUMBER = "phoneNumber";
-    private String fixTime;
-   	public static final String LOCATION_FILE = "locationFile"; 
-    
+  
     public Settings() {
     	
     }  
@@ -47,7 +42,7 @@ public class Settings extends Activity {
 		setContentView(R.layout.activity_settings);
 		// Show the Up button in the action bar.
 		setupActionBar();
-		if(Instance.getSettings().locationInfo != null){
+		if(Instance.getSettings(this).locationInfo != null){
 			updateLocation();
 		}
 		displayPhoneNumber();
@@ -90,7 +85,7 @@ public class Settings extends Activity {
 		SharedPreferences settings = getSharedPreferences(MainActivity.FILENAME, 0);
 		SharedPreferences.Editor editPref = settings.edit();
 		String returnedValue = "";
-		String pNumber = settings.getString(PHONENUMBER,returnedValue);
+		String pNumber = settings.getString(Instance.PHONENUMBER,returnedValue);
 		if(pNumber.isEmpty())
 		{
 			String mPhoneNumber = ((TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
@@ -99,15 +94,16 @@ public class Settings extends Activity {
 			} else {
 				EditText phoneText = (EditText)findViewById(R.id.enterPhoneNumberID);
 				phoneText.setText(mPhoneNumber);
-
-				editPref.putString(PHONENUMBER,mPhoneNumber);
+				editPref.putString(Instance.PHONENUMBER,mPhoneNumber);
 				editPref.commit();
+				Instance.getSettings(this).enteredNumber = mPhoneNumber;
 			}
 		}
 		else
 		{
 			EditText phoneText = (EditText)findViewById(R.id.enterPhoneNumberID);
 			phoneText.setText(pNumber);
+			Instance.getSettings(this).enteredNumber = pNumber;
 		}
 	}
 	
@@ -118,77 +114,34 @@ public class Settings extends Activity {
 		
     	EditText phoneText = (EditText)findViewById(R.id.enterPhoneNumberID);
     	
-    	editPref.putString(PHONENUMBER, phoneText.getText().toString());
+    	editPref.putString(Instance.getSettings(this).PHONENUMBER, phoneText.getText().toString());
     	editPref.commit();
-    	
+    	Instance.getSettings(this).enteredNumber = phoneText.getText().toString();
     	Toast toast = Toast.makeText(getApplicationContext(), "Phone number saved.", Toast.LENGTH_SHORT);
 		toast.show();
     }
 	
 	
 	public void updateLocation() {
-		Instance.getSettings().locationInfo.refresh(getBaseContext());
-		String locationLat = Float.toString(Instance.getSettings().locationInfo.lastLat);
+		Instance.getSettings(this).locationInfo.refresh(getBaseContext());
+		String locationLat = Float.toString(Instance.getSettings(this).locationInfo.lastLat);
 		TextView lat = (TextView) findViewById(R.id.latText);
 		lat.setText(locationLat);
-		String locationLng = Float.toString(Instance.getSettings().locationInfo.lastLong);
+		String locationLng = Float.toString(Instance.getSettings(this).locationInfo.lastLong);
 		TextView lng = (TextView) findViewById(R.id.longText);
 		lng.setText(locationLng);
-		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.UK);
-		dateFormatter.setLenient(false);
-		Date today = new Date();
-		fixTime = dateFormatter.format(today);
-		boolean cached = true;
-		RequestParams params = new RequestParams();
-		// add parameter mobileNumber
-		SharedPreferences settings = getSharedPreferences(MainActivity.FILENAME, 0);
-		String returnedValue = "";
-		String pNumber = settings.getString(PHONENUMBER,returnedValue);
-		params.put("mobileNumber", pNumber);
-		params.put("longitude", locationLng);
-		params.put("latitude", locationLat);
-		params.put("fixTime", fixTime);
-		AsyncHttpClient client = new AsyncHttpClient();
-    	APIClient.setBasicAuth("mobileApplication","hupad8uC");
-    	APIClient.post("team/location", params, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(JSONObject data) {        		
-            	try {
-	                boolean ok = data.getBoolean("ok");
-	                if (ok) {
-	                	saveLocation(Float.toString(Instance.getSettings().locationInfo.lastLat),Float.toString(Instance.getSettings().locationInfo.lastLong),fixTime,false);
-	                }
-            	}
-            	catch (JSONException e) {
-            		e.printStackTrace();
-            	}
-            }
-           
-			@Override
-            public void onFailure(int statusCode, java.lang.Throwable e, org.json.JSONObject errorResponse) {
-            	saveLocation(Float.toString(Instance.getSettings().locationInfo.lastLat),Float.toString(Instance.getSettings().locationInfo.lastLong),fixTime,true);
-            }
-        });
+		Instance.getSettings(this).sendToServer();
 	}
-	
-	 private void saveLocation(String lat, String lng, String fixTime, boolean fail) {
-		 try {
-			String csv = lat + "," + lng + "," + fixTime + "," + fail + System.getProperty("line.separator");
-			FileOutputStream fos = openFileOutput(LOCATION_FILE, MODE_APPEND);
-			fos.write(csv.getBytes());
-			fos.close();
-		 } catch (IOException e) {
-			e.printStackTrace();
-		 }				 
-	 }
 	
 	//Click start updates button
     public void startUpdates() {
     	try{        	
-        	LocationLibrary.initialiseLibrary(getBaseContext(), LocationUtils.FAST_CEILING_IN_SECONDS, LocationUtils.UPDATE_INTERVAL_IN_SECONDS, "com.equinoxchallenge");
+        	LocationLibrary.initialiseLibrary(getBaseContext(), LocationUtils.UPDATE_INTERVAL_IN_MILLISECONDS, LocationUtils.TOP_LIMIT_IN_MILLISECONDS, "com.equinoxchallenge");
         	LocationLibrary.useFineAccuracyForRequests(true);
         	//LocationLibrary.startAlarmAndListener(getBaseContext());
-        	Instance.getSettings().locationInfo = new LocationInfo(getBaseContext());
+        	Instance.getSettings(this).locationInfo = new LocationInfo(getBaseContext());
+        	LocationLibrary.startAlarmAndListener(getBaseContext());
+        	
         	updateLocation();
         } catch (UnsupportedOperationException ex) {
         	Toast.makeText(getApplicationContext(), "There was a problem, you do not have location turned on.", Toast.LENGTH_LONG).show();
@@ -197,7 +150,7 @@ public class Settings extends Activity {
     
     public void stopUpdates() {
     	LocationLibrary.stopAlarmAndListener(getBaseContext());
-    	Instance.getSettings().locationInfo = null;
+    	Instance.getSettings(this).locationInfo = null;
     }
     
     public void checkGameStart(View view) throws JSONException {

@@ -98,6 +98,12 @@
 
         <service android:name="com.littlefluffytoys.littlefluffylocationlibrary.LocationBroadcastService" />
 
+        <receiver android:name="com.equinoxchallenge.LocationReceiver">
+            <intent-filter>
+                <action android:name="com.equinoxchallenge.littlefluffylocationlibrary.LOCATION_CHANGED" android:exported="false"/>
+            </intent-filter>
+        </receiver>
+        
         <receiver
             android:name="com.littlefluffytoys.littlefluffylocationlibrary.StartupBroadcastReceiver"
             android:exported="true" >

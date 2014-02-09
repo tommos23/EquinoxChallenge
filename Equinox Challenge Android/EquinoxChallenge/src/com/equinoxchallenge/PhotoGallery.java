@@ -37,7 +37,7 @@ public class PhotoGallery extends Activity {
 		
 		GridView gridview = (GridView) findViewById(R.id.gridview);
 	    gridview.setAdapter(new ImageAdapter(this));
-
+	    
 	    gridview.setOnItemClickListener(new OnItemClickListener() {
 	        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 	            Toast.makeText(PhotoGallery.this, "" + position, Toast.LENGTH_SHORT).show();
@@ -96,7 +96,7 @@ public class PhotoGallery extends Activity {
 	        Bitmap bitmap = BitmapFactory.decodeFile(file[position].getAbsolutePath(), bmOptions);
 	        
 	        
-	        if (convertView == null) {  // if it's not recycled, initialize some attributes
+	        if (convertView == null) {  // if it's not recycled, initialise some attributes
 	            imageView = new ImageView(mContext);
 	            imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
 	            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);

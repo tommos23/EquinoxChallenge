@@ -72,7 +72,7 @@ public class MainActivity extends Activity {
     
     //Click photos button
     public void photos(View view) {
-    	Intent intent = new Intent(this, PhotoGallery.class);
+    	Intent intent = new Intent(this, Photos.class);
     	startActivity(intent);
     }
     

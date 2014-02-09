@@ -54,13 +54,13 @@ public class Photos extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_photos);
-		// Show the Up button in the action bar.
-		setupActionBar();
-		setPreview();
 		
     	View backgroundimage = findViewById(R.id.photoView);
     	Drawable background = backgroundimage.getBackground();
     	background.setAlpha(30);
+    	
+    	setupActionBar();
+		setPreview();
 	}
 	
 	private void setPreview() {
