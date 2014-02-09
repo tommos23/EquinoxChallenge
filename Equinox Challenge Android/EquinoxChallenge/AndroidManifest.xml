@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.equinoxchallenge"
-    android:versionCode="2"
-    android:versionName="1.1" >
+    android:versionCode="3"
+    android:versionName="1.2" >
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -35,7 +35,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.equinoxchallenge.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+        	android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -45,7 +46,8 @@
         <activity
             android:name="com.equinoxchallenge.RecordPost"
             android:label="@string/title_activity_record_post"
-            android:parentActivityName="com.equinoxchallenge.MainActivity" >
+            android:parentActivityName="com.equinoxchallenge.MainActivity"
+        	android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.equinoxchallenge.MainActivity" />
@@ -53,7 +55,8 @@
         <activity
             android:name="com.equinoxchallenge.Photos"
             android:label="@string/title_activity_photos"
-            android:parentActivityName="com.equinoxchallenge.MainActivity" >
+            android:parentActivityName="com.equinoxchallenge.MainActivity"
+        	android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.equinoxchallenge.MainActivity" />
@@ -61,7 +64,8 @@
         <activity
             android:name="com.equinoxchallenge.PanicButton"
             android:label="@string/title_activity_panic_button"
-            android:parentActivityName="com.equinoxchallenge.MainActivity" >
+            android:parentActivityName="com.equinoxchallenge.MainActivity"
+        	android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.equinoxchallenge.MainActivity" />
@@ -69,7 +73,8 @@
         <activity
             android:name="com.equinoxchallenge.Evacuate"
             android:label="@string/title_activity_evacuate"
-            android:parentActivityName="com.equinoxchallenge.MainActivity" >
+            android:parentActivityName="com.equinoxchallenge.MainActivity"
+        	android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.equinoxchallenge.MainActivity" />
@@ -77,7 +82,8 @@
         <activity
             android:name="com.equinoxchallenge.Settings"
             android:label="@string/title_activity_settings"
-            android:parentActivityName="com.equinoxchallence.MainActivity" >
+            android:parentActivityName="com.equinoxchallence.MainActivity"
+        	android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.equinoxchallenge.MainActivity" />
@@ -86,7 +92,8 @@
         <activity
             android:name="com.equinoxchallenge.PhotoGallery"
             android:label="@string/title_activity_photo_gallery"
-            android:parentActivityName="com.equinoxchallence.Photos" >
+            android:parentActivityName="com.equinoxchallence.Photos"
+        	android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.equinoxchallence.Photos" />
