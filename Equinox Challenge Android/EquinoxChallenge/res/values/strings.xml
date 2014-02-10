@@ -77,5 +77,7 @@
     <string name="userPhoto">User Taken Photo</string>
     <string name="deleteImage">Delete Image</string>
     <string name="sync_photos">Sync Photos</string>
+    <string name="title_activity_photo_comment">Photo Comment</string>
+    <string name="comment">Comment</string>
 
 </resources>

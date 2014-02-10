@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.graphics.Interpolator.Result;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.widget.Toast;
@@ -66,22 +67,31 @@ class savePhoto extends AsyncTask<String, Void, String> {
 	    String filename = pictureFileDir.getPath() + File.separator + photoFile;
 	    File pictureFile = new File(filename);
 	    Instance.getSettings(context).pFileName = filename;
-	    Instance i = Instance.getSettings(context);
 	    try {
 	        FileOutputStream fos = new FileOutputStream(pictureFile);
 	        fos.write(data);
-	        fos.close(); 
+	        fos.close();
+	        galleryAddPic();
 	      } catch (Exception error) {
 	        cancel(true);     
 	      } 
 		return null;
 	}
 	
+	private void galleryAddPic() {
+	    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+	    File f = new File(Instance.getSettings(context).pFileName);
+	    Uri contentUri = Uri.fromFile(f);
+	    mediaScanIntent.setData(contentUri);
+	    context.sendBroadcast(mediaScanIntent);
+	}
+
+	
 	@Override
 	protected void onPostExecute(String result) {
 		super.onPostExecute(result);
 		Toast.makeText(context, "New Image saved", Toast.LENGTH_LONG).show();
-		Instance.getSettings(context).startGallery(context);
+		Instance.getSettings(context).showPhoto();
 	}
 	
 	protected void onCancelled(Result r) {

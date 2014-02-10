@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -32,6 +31,7 @@ import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.os.Build;
+import android.provider.MediaStore;
 
 
 @SuppressLint("SimpleDateFormat")
@@ -44,11 +44,7 @@ public class Photos extends Activity {
 	private int cameraId = 0;
 	private Preview mPreview;
     private static final String PHONENUMBER = "phoneNumber";
-	
-	// Variables for network detection
-	ConnectivityManager conMan = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-	State mobile = conMan.getNetworkInfo(0).getState();
-	State wifi = conMan.getNetworkInfo(1).getState();
+		
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -109,8 +105,7 @@ public class Photos extends Activity {
 	}
 	
 	public void galleryStart() {
-		Intent intent = new Intent(this, PhotoGallery.class);
-	    startActivity(intent);
+		//Start Gallery Intent
 	}
 	
 	@Override
@@ -139,9 +134,7 @@ public class Photos extends Activity {
 	    }
 	}
 
-	/**
-	 * Set up the {@link android.app.ActionBar}, if the API is available.
-	 */
+
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void setupActionBar() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -176,7 +169,7 @@ public class Photos extends Activity {
 	
 	String mCurrentPhotoPath;
 	
-	/* Checks if external storage is available for read and write */
+
 	public boolean isExternalStorageWritable() {
 	    String state = Environment.getExternalStorageState();
 	    if (Environment.MEDIA_MOUNTED.equals(state)) {
@@ -185,7 +178,7 @@ public class Photos extends Activity {
 	    return false;
 	}
 
-	/* Checks if external storage is available to at least read */
+
 	public boolean isExternalStorageReadable() {
 	    String state = Environment.getExternalStorageState();
 	    if (Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
@@ -193,8 +186,8 @@ public class Photos extends Activity {
 	    }
 	    return false;
 	}
-	
-	/*public void dispatchTakePictureIntent(View view) {
+	/*
+	public void dispatchTakePictureIntent(View view) {
 	    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 	    // Ensure that there's a camera activity to handle the intent
 	    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -237,6 +230,9 @@ public class Photos extends Activity {
 	}*/
 	
 	public void uploadPhotos() {
+		ConnectivityManager conMan = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		State mobile = conMan.getNetworkInfo(0).getState();
+		State wifi = conMan.getNetworkInfo(1).getState();
 		// Check WiFi availability
 		// If WiFi upload remaining locations, then photos
 		if (wifi == NetworkInfo.State.CONNECTED || wifi == NetworkInfo.State.CONNECTING) {

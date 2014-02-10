@@ -38,9 +38,10 @@ public class  Instance {
     	return instance;
     }
 	
-	public void startGallery(Context context) {
-		Intent intent = new Intent(context.getApplicationContext(), PhotoGallery.class);
-		context.getApplicationContext().startActivity(intent);  
+	public void showPhoto() {
+		Intent intent = new Intent(cont, PhotoComment.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    	cont.startActivity(intent);
 	}
 	
 	public void sendToServer() {

@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.SEND_SMS" />
 
     <uses-feature
         android:name="android.hardware.location"
@@ -26,7 +26,8 @@
     <uses-sdk
         android:minSdkVersion="15"
         android:targetSdkVersion="19" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -82,7 +83,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.equinoxchallenge.MainActivity" />
         </activity>
-        
         <activity
             android:name="com.equinoxchallenge.PhotoGallery"
             android:label="@string/title_activity_photo_gallery"
@@ -98,12 +98,13 @@
 
         <service android:name="com.littlefluffytoys.littlefluffylocationlibrary.LocationBroadcastService" />
 
-        <receiver android:name="com.equinoxchallenge.LocationReceiver">
+        <receiver android:name="com.equinoxchallenge.LocationReceiver" >
             <intent-filter>
-                <action android:name="com.equinoxchallenge.littlefluffylocationlibrary.LOCATION_CHANGED" android:exported="false"/>
+                <action
+                    android:name="com.equinoxchallenge.littlefluffylocationlibrary.LOCATION_CHANGED"
+                    android:exported="false" />
             </intent-filter>
         </receiver>
-        
         <receiver
             android:name="com.littlefluffytoys.littlefluffylocationlibrary.StartupBroadcastReceiver"
             android:exported="true" >
@@ -115,7 +116,14 @@
             android:name="com.littlefluffytoys.littlefluffylocationlibrary.PassiveLocationChangedReceiver"
             android:exported="true" />
 
-        
+        <activity
+            android:name="com.equinoxchallenge.PhotoComment"
+            android:label="@string/title_activity_photo_comment"
+            android:parentActivityName="com.equinoxchallenge.Photos" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.equinoxchallenge.Photos" />
+        </activity>
     </application>
 
 </manifest>
